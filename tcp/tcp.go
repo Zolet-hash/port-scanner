@@ -18,7 +18,7 @@ func ScanPortConcurrently(host string, port int, timeout time.Duration,
 
 	defer func() { <-sem }()
 
-	address := fmt.Sprintf("%s%d", host, port)
+	address := fmt.Sprintf("%s:%d", host, port)
 	conn, err := net.DialTimeout("tcp4", address, timeout)
 	if err != nil {
 		return
