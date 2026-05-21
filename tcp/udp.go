@@ -3,6 +3,8 @@ package tcp
 import (
 	"fmt"
 	"net"
+	"sync"
+	"time"
 )
 
 // ScanUDPPort scans open ports using UDP port scanning technique
@@ -14,7 +16,63 @@ func ScanUDPPort(host string, port int) bool {
 		fmt.Println("Error:", err)
 		return false
 	}
-	conn.Close()
+	defer conn.Close()
+
+	conn.SetDeadline(time.Now().Add(1 * time.Second))
+
+	_, err = conn.Write([]byte("ping"))
+	if err != nil {
+		fmt.Println("Error:", err)
+		return false
+	}
+
+	buf := make([]byte, 1024)
+	_, err = conn.Read(buf)
+	if err != nil {
+		//timeout or ICMP unreachable
+		fmt.Println("Error:", err)
+		return false
+	}
+
 	return true
+
+}
+
+func ScanUDPPortConcurrently(host string, port int,
+	results chan<- int, wg *sync.WaitGroup, sem chan struct{}) {
+	defer wg.Done()
+
+	defer func() { <-sem }()
+
+	address := fmt.Sprintf("%s:%d", host, port)
+	conn, err := net.Dial("udp", address)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	conn.Close()
+	results <- port
+}
+
+func ScanUDPHost(host string, startPort, endPort, maxConcurrent int,) []int {
+	result := make(chan int, endPort - startPort+1)
+	sem := make(chan struct{}, maxConcurrent) // Limit concurrent connection attempts at a time
+
+	var wg sync.WaitGroup
+	for port := startPort; port <= endPort; port++ {
+		sem <- struct{}{}
+		wg.Add(1)
+		
+		go ScanUDPPortConcurrently(host, port, result, &wg, sem )
+	}
+
+	//Wait for go routines to finish then close all channels
+	go func ()  {
+		wg.Wait()
+		close(result)
+	}
+
+	
+
 
 }
