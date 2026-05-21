@@ -55,13 +55,19 @@ func main() {
 		}
 	case "-u":
 		fmt.Printf("Scanning %s ports 1-65535...\n", host)
-		for port := 1; port <= 1024; port++ {
-			if tcp.ScanUDPPort(host, port) {
-				fmt.Printf("Port: %d is OPEN\n", port)
-			} else {
-				fmt.Printf("Port: %d is closed\n", port)
-			}
+		start := time.Now()
+
+		openPorts := tcp.ScanUDPHost(host, 1, 1024, 500)
+
+		elapsed := time.Since(start)
+
+		fmt.Printf("Scan completed in %s\n", elapsed)
+		fmt.Printf("Open ports on %s:\n", host)
+
+		for _, port := range openPorts {
+			fmt.Printf("  %d/udp   open\n", port)
 		}
+
 	}
 
 	// for port := 1; port <= 1024; port++ {
