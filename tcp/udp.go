@@ -3,6 +3,7 @@ package tcp
 import (
 	"fmt"
 	"net"
+	"sort"
 	"sync"
 	"time"
 )
@@ -50,29 +51,41 @@ func ScanUDPPortConcurrently(host string, port int,
 		fmt.Println(err)
 		return
 	}
-	conn.Close()
+	defer conn.Close()
+	conn.SetDeadline(time.Now().Add(1 * time.Second))
+
+	_, err = conn.Write([]byte("ping"))
+	if err != nil {
+		// Timeout or ICMP unreachable
+		fmt.Println(err)
+		return
+	}
 	results <- port
 }
 
-func ScanUDPHost(host string, startPort, endPort, maxConcurrent int,) []int {
-	result := make(chan int, endPort - startPort+1)
+func ScanUDPHost(host string, startPort, endPort, maxConcurrent int) []int {
+	result := make(chan int, endPort-startPort+1)
 	sem := make(chan struct{}, maxConcurrent) // Limit concurrent connection attempts at a time
 
 	var wg sync.WaitGroup
 	for port := startPort; port <= endPort; port++ {
 		sem <- struct{}{}
 		wg.Add(1)
-		
-		go ScanUDPPortConcurrently(host, port, result, &wg, sem )
+
+		go ScanUDPPortConcurrently(host, port, result, &wg, sem)
 	}
 
 	//Wait for go routines to finish then close all channels
-	go func ()  {
+	go func() {
 		wg.Wait()
 		close(result)
+	}()
+
+	var openPorts []int
+	for port := range result {
+		openPorts = append(openPorts, port)
 	}
-
-	
-
+	sort.Ints(openPorts)
+	return openPorts
 
 }
