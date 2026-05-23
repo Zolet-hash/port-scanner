@@ -39,27 +39,42 @@ func ScanUDPPort(host string, port int) bool {
 
 }
 
-func ScanUDPPortConcurrently(host string, port int,
-	results chan<- int, wg *sync.WaitGroup, sem chan struct{}) {
+func ScanUDPPortConcurrently(
+	host string,
+	port int,
+	results chan<- int,
+	wg *sync.WaitGroup,
+	sem chan struct{},
+) {
 	defer wg.Done()
-
 	defer func() { <-sem }()
 
 	address := fmt.Sprintf("%s:%d", host, port)
-	conn, err := net.Dial("udp", address)
+
+	conn, err := net.DialTimeout("udp", address, 1*time.Second)
 	if err != nil {
-		fmt.Println(err)
 		return
 	}
 	defer conn.Close()
-	conn.SetDeadline(time.Now().Add(1 * time.Second))
 
+	_ = conn.SetDeadline(time.Now().Add(1 * time.Second))
+
+	// Send probe packet
 	_, err = conn.Write([]byte("ping"))
 	if err != nil {
-		// Timeout or ICMP unreachable
-		fmt.Println(err)
 		return
 	}
+
+	// Wait for response
+	buffer := make([]byte, 1024)
+
+	_, err = conn.Read(buffer)
+	if err != nil {
+		// Most UDP services won't respond,
+		// so timeout does NOT necessarily mean closed.
+		return
+	}
+
 	results <- port
 }
 
