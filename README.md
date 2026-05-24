@@ -3,10 +3,10 @@
 A lightweight yet powerful port scanner written in Go, implementing multiple scanning techniques inspired by concepts from Nmap while making use of Go's networking power and goroutines for high-speed concurrent scanning.
 
 Features
-TCP Connect Scanning
-SYN Scanning
-FIN Scanning
-NULL Scanning
+- TCP Connect Scanning
+- SYN Scanning
+- FIN Scanning
+- NULL Scanning
 UDP Scanning
 Service Banner Grabbing
 Concurrent Scanning using Goroutines
@@ -17,7 +17,7 @@ Cross-platform Support
 Clean CLI Interface
 Why This Project?
 
-This project was built to deepen understanding of:
+# This project was built to deepen understanding of:
 
 Network protocols
 TCP/IP internals
@@ -26,7 +26,7 @@ Concurrent programming in Go
 Low-level reconnaissance techniques
 Cybersecurity tooling development
 
-It demonstrates practical knowledge of:
+# It demonstrates practical knowledge of:
 
 Goroutines
 Channels
