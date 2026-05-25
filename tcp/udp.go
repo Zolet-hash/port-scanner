@@ -39,6 +39,7 @@ func ScanUDPPort(host string, port int) bool {
 
 }
 
+//ScanUDPPortConcurrently scans UDP post concurently
 func ScanUDPPortConcurrently(
 	host string,
 	port int,
@@ -78,6 +79,7 @@ func ScanUDPPortConcurrently(
 	results <- port
 }
 
+// ScanUDPHost scans host using udp protocol
 func ScanUDPHost(host string, startPort, endPort, maxConcurrent int) []int {
 	result := make(chan int, endPort-startPort+1)
 	sem := make(chan struct{}, maxConcurrent) // Limit concurrent connection attempts at a time
