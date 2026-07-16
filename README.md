@@ -79,7 +79,7 @@ The scanner uses:
 Instead of scanning ports sequentially, multiple workers scan ports concurrently, resulting in significantly faster execution.
 
 Example workflow:
-
+```shell
 Ports  
    │  
    ▼  
@@ -91,7 +91,7 @@ Worker 2 ── Scan Port
 Worker 3 ── Scan Port  
 ...  
 Worker N ── Scan Port
-
+```
 This approach allows efficient utilization of system resources while keeping the implementation simple and scalable.
 
 ---
@@ -113,41 +113,41 @@ This approach allows efficient utilization of system resources while keeping the
 ## **Installation**
 
 Clone the repository:
-
+```shell
 git clone https://github.com/Zolet-hash/port-scanner.git
-
+```
 Move into the project directory:
-
+```shell
 cd port-scanner
-
+```shell
 Run the program:
-
+```shell
 go run .
-
+```shell
 Or build the executable:
-
+```shell
 go build
-
+```
 ---
 
 ## **Usage**
 
 Example:
-
+```shell
 go run . \[OPTIONS\] \[HOST\] \[PORT\]
-
+```shell
 UDP scan:
-
+```shell
 go run . -u 127.0.0.1
-
+```shell
 Example output:
 
 Scanning scanme.nmap.org...
-
+```shell
 \[OPEN\] TCP 22  
 \[OPEN\] TCP 80  
 \[OPEN\] TCP 443
-
+```shell
 Scan completed in 1.83s
 
 ---
