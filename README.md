@@ -97,7 +97,7 @@ This approach allows efficient utilization of system resources while keeping the
 ---
 
 ## **Project Structure**
-
+```shell
 .
 ├── Dockerfile
 ├── go.mod
@@ -107,14 +107,14 @@ This approach allows efficient utilization of system resources while keeping the
 └── tcp
     ├── tcp.go
     └── udp.go
-
+```
 ---
 
 ## **Installation**
 
 Clone the repository:
 
-git clone https://github.com/yourusername/your-repository.git
+git clone https://github.com/Zolet-hash/port-scanner.git
 
 Move into the project directory:
 
