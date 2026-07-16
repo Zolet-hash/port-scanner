@@ -78,14 +78,7 @@ UDP Scan
 
 Attempts communication over UDP ports to identify open services.
 
-Useful for discovering:
-
-DNS
-SNMP
-DHCP
-NTP
-Other UDP-based services
-Architecture
+```shell
             +------------------+
             |     CLI Input     |
             +------------------+
@@ -114,3 +107,4 @@ Architecture
             +------------------+
             | Output Formatter  |
             +------------------+
+```
