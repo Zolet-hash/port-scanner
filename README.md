@@ -113,18 +113,22 @@ This approach allows efficient utilization of system resources while keeping the
 ## **Installation**
 
 Clone the repository:
+
 ```shell
 git clone https://github.com/Zolet-hash/port-scanner.git
 ```
 Move into the project directory:
+
 ```shell
 cd port-scanner
-```shell
+```
 Run the program:
+
 ```shell
 go run .
-```shell
+```
 Or build the executable:
+
 ```shell
 go build
 ```
@@ -135,11 +139,11 @@ go build
 Example:
 ```shell
 go run . \[OPTIONS\] \[HOST\] \[PORT\]
-```shell
+```
 UDP scan:
 ```shell
 go run . -u 127.0.0.1
-```shell
+```
 Example output:
 
 Scanning scanme.nmap.org...
@@ -147,7 +151,7 @@ Scanning scanme.nmap.org...
 \[OPEN\] TCP 22  
 \[OPEN\] TCP 80  
 \[OPEN\] TCP 443
-```shell
+```
 Scan completed in 1.83s
 
 ---
